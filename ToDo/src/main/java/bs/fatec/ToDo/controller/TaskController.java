@@ -2,11 +2,13 @@ package bs.fatec.ToDo.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,22 +48,20 @@ public class TaskController {
         return ResponseEntity.created(location).body(task);
     }
     
-    //@PutMapping(value = "/{id}")
-    //public ResponseEntity<Task> put(@RequestBody Task updatedTask) {
-    //   System.out.println("Received PUT request for Task ID: " );
-    //	if (service.update(updatedTask)) {
-    //        return ResponseEntity.ok(updatedTask);
-    //    }
-    //   return ResponseEntity.notFound().build();
-    //}
-    
     @PutMapping(value = "/{id}")
     public ResponseEntity<Task> put(@PathVariable("id") Long id, @RequestBody Task task){
     	Task updTask = service.update(id, task);
         return ResponseEntity.ok().body(updTask);
-
     }
 
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Task> patch(@PathVariable("id") Long id, @RequestBody Map<String, Object> updates) {
+        if (service.patch(id, updates)) {
+            return ResponseEntity.ok(service.findById(id));
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         if (service.delete(id)) {

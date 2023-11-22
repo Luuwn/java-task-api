@@ -8,10 +8,10 @@ public class Task {
 	private Long id;
 	private String title;
 	private String description;
-	private enum Status { TODO, IN_PROGRESS, DONE};
+	public enum Status { TODO, IN_PROGRESS, DONE};
 	private Status status;
 	private LocalDate dueDate;
-	private enum Priority {LOW, MEDIUM, HIGH};
+	public enum Priority {LOW, MEDIUM, HIGH};
 	private Priority priority;
 	
 	private static Long nextId = 1L;

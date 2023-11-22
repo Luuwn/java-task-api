@@ -1,7 +1,9 @@
 package bs.fatec.ToDo.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -30,41 +32,41 @@ public class TaskService {
 	    return null;
 	}
 	
-	//public Task findByTask(Task task) {
-	//	for(Task t : tasks) {
-	//		if (t.equals(task)) {
-	//			return t;
-	//		}
-	//	}
-	//	return null;
-	//}
-	
 	public Task update(Long id, Task task) {
 		Task _task = findById(id);
-		//if (task != null) {
 		_task.setTitle(task.getTitle());
 		_task.setDescription(task.getDescription());
 		_task.setStatus(task.getStatus());
 		_task.setDueDate(task.getDueDate());
 		_task.setPriority(task.getPriority());
 		return _task;
-			
-		//}
 	}
 	
-	public boolean update(Task task) {
-		//Long id = task.getId();
-		//Task _task = findById(id);
-		if (task != null) {
-			task.setTitle(task.getTitle());
-			task.setDescription(task.getDescription());
-			task.setStatus(task.getStatus());
-			task.setDueDate(task.getDueDate());
-			task.setPriority(task.getPriority());
-			return true;
-			
-		}
-		return false;
+	public boolean patch(Long id, Map<String, Object> updates) {
+	    Task taskToUpdate = findById(id);
+	    if (taskToUpdate != null) {
+	        updates.forEach((key, value) -> {
+	            switch (key) {
+	                case "title":
+	                    taskToUpdate.setTitle((String) value);
+	                    break;
+	                case "description":
+	                    taskToUpdate.setDescription((String) value);
+	                    break;
+	                case "status":
+	                    taskToUpdate.setStatus(Task.Status.valueOf((String) value));
+	                    break;
+	                case "dueDate":
+	                    taskToUpdate.setDueDate(LocalDate.parse((String) value));
+	                    break;
+	                case "priority":
+	                    taskToUpdate.setPriority(Task.Priority.valueOf((String) value));
+	                    break;
+	            }
+	        });
+	        return true;
+	    }
+	    return false;
 	}
 	
 	public boolean delete(Long id) {
