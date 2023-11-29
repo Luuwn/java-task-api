@@ -1,33 +1,50 @@
 package bs.fatec.ToDo.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Task {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="tb_tarefa")
+public class Task implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name="nm_title")
 	private String title;
+
+	@Column(name="ds_description")
 	private String description;
-	public enum Status { TODO, IN_PROGRESS, DONE};
+
+	@Column(name="nm_status")
 	private Status status;
+
+	@Column(name="dt_date")
 	private LocalDate dueDate;
-	public enum Priority {LOW, MEDIUM, HIGH};
+
+	@Column(name="nm_priority")
 	private Priority priority;
+
+	public enum Priority {LOW, MEDIUM, HIGH};
+	public enum Status { TODO, IN_PROGRESS, DONE};
+
 	
 	private static Long nextId = 1L;
 	
 	public Task() {}
 
     public Task(Long id) {  this.id = id; }
-	
-	public Task(Long id, String title, String description, Status status, LocalDate dueDate, Priority priority) {
-	    this.id = id;
-	    this.title = title;
-	    this.description = description;
-	    this.status = status;
-	    this.dueDate = dueDate;
-	    this.priority = priority;
-	}
 	
 	public Long generateId() {
 		return nextId++;
@@ -81,6 +98,10 @@ public class Task {
 		this.priority = priority;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -101,4 +122,3 @@ public class Task {
 	
 	
 }
-
