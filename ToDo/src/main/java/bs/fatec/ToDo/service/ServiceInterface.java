@@ -1,6 +1,7 @@
 package bs.fatec.ToDo.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ServiceInterface<T> {
 	T create(T obj);
@@ -9,7 +10,9 @@ public interface ServiceInterface<T> {
 
 	List<T> findAll();
 
-	boolean update(T obj);
+	boolean update(Long id, T obj);
+
+	boolean patch(Long id, Map<String, Object> updates);
 
 	boolean delete(Long id);
 }

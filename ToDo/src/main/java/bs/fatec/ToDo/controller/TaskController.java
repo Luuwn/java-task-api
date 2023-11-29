@@ -69,13 +69,13 @@ public class TaskController implements ControllerInterface<Task>{
     }
 
     // PUT
-    @PutMapping(produces = "application/json")
+    @PutMapping(value="/{id}",produces = "application/json")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task atualizada"),
             @ApiResponse(responseCode = "404", description = "Task não encontrada"),
             @ApiResponse(responseCode = "500", description = "Erro interno do sistema"), })
-    public ResponseEntity<?> put(@RequestBody Task task) {
-        if (service.update(task)) {
+    public ResponseEntity<?> put(@PathVariable("id") Long id, @RequestBody Task task) {
+        if (service.update(id,task)) {
             return ResponseEntity.ok(task);
         }
         return ResponseEntity.notFound().build();

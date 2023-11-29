@@ -38,8 +38,9 @@ public class TaskService implements ServiceInterface<Task> {
 	}
 
 	@Override
-	public boolean update(Task obj) {
-		if (repository.existsById(obj.getId())) {
+	public boolean update(Long id, Task obj) {
+		if (repository.existsById(id)) {
+			obj.setId(id); 
 			repository.save(obj);
 			return true;
 		}
@@ -55,10 +56,17 @@ public class TaskService implements ServiceInterface<Task> {
 		return false;
 	}
 
+	@Override
 	public boolean patch(Long id, Map<String, Object> updates) {
-		Task taskToUpdate = findById(id);
-		if (taskToUpdate != null) {
-			updates.forEach((key, value) -> {
+		Optional<Task> optionalTask = repository.findById(id);
+	
+		if (optionalTask.isPresent()) {
+			Task taskToUpdate = optionalTask.get();
+	
+			for (Map.Entry<String, Object> entry : updates.entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+	
 				switch (key) {
 					case "title":
 						taskToUpdate.setTitle((String) value);
@@ -76,7 +84,8 @@ public class TaskService implements ServiceInterface<Task> {
 						taskToUpdate.setPriority(Task.Priority.valueOf((String) value));
 						break;
 				}
-			});
+			}
+			repository.save(taskToUpdate);
 			return true;
 		}
 		return false;
